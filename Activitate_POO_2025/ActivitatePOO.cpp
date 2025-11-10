@@ -16,13 +16,13 @@ public:
 	Vaccin() :idVaccin(++nrDozeMaxime)//constructor default
 	{
 		this->nrDoze = 2;
-		this->instructiuniAplicare = "1. Deschidere recipient medicament 2. Extragere cu seringa 3. Aplucarea spirtului pe membrul pacientului 4. Introducere ac de la vaccin in membrul pacientului";
+		this->instructiuniAplicare = "1. Deschidere recipient medicament, 2. Extragere cu seringa, 3. Aplicarea spirtului pe membrul pacientului, 4. Introducere ac de la vaccin in membrul pacientului";
 		this->greutateVaccin = 0.01;
 		this->numeVaccin = nullptr;
-		//nrDozeMaxime++; am initializat jos numarul static daca pun  nrDozeMaxime++ imi da eroare
+		//nrDozeMaxime++; //am initializat jos numarul static daca pun  nrDozeMaxime++ imi da eroare
 	}
 
-	/*Vaccin(int nrDoze, string instructiuniAplicare, const char* numeVaccin, float greutateVaccin) //constructor cu parametrii, initializare
+	Vaccin(int nrDoze, string instructiuniAplicare, const char* numeVaccin, float greutateVaccin) : idVaccin(++nrDozeMaxime) //constructor cu parametrii, initializare
 	{
 		this->nrDoze = nrDoze;
 		this->instructiuniAplicare = instructiuniAplicare;
@@ -38,12 +38,12 @@ public:
 		}
 	}
 
-	// Destructor pentru eliberarea memoriei
+	/* // Destructor pentru eliberarea memoriei
 	~Vaccin()
 	{
 		delete[] numeVaccin;
-	}
-*/
+	}*/
+
 }; 
 
 int Vaccin::nrDozeMaxime = 0; //neaparat aici altfel nu imi ruleaza programul
@@ -65,10 +65,25 @@ class VizitaMedicala //obiectul2
 		this->numeMedic = "Gabriela Stanescu";
 		this->greutateAnimal = 0.5;
 		this->numePacient = nullptr;
-
+		++nrViziteIntr_unAn;
 	}
-
-	/*VizitaMedicala(int nrVaccinuri, const char* numePacient, string numeMedic, float greutateAnimal) //constructor cu parametrii, initializare
+	VizitaMedicala(int nrVaccinuri, const char* numePacient, string numeMedic, float greutateAnimal) :idPacient(nrViziteIntr_unAn)
+	{
+		this->nrVaccinuri = nrVaccinuri;
+		this->numeMedic = numeMedic;
+		this->greutateAnimal = greutateAnimal;
+		if (numePacient != 0)
+		{
+			this->numePacient = new char[strlen(numePacient) + 1];
+			strcpy_s(this->numePacient, strlen(numePacient) + 1, numePacient);
+		}
+		else
+		{
+			this->numePacient = nullptr;
+		}
+	}
+/*
+	VizitaMedicala(int nrVaccinuri, const char* numePacient, string numeMedic, float greutateAnimal) //constructor cu parametrii, initializare
 	{
 		this->nrVaccinuri = nrVaccinuri;
 		this->numeMedic = numeMedic;
@@ -98,24 +113,40 @@ public:
 		this->temperatura = 20.3;
 		this->numeInstrument = nullptr;
 	}
-	/*EchipamentMedical(int garantieAni, const char* numeInstrument, string dataExpirare, float temperatura) //constructori cu paramterii, initializare
+	EchipamentMedical(int nrInstrumenteInventar, const char* numeInstrument, string dataExpirare, float temperatura) :idInstrument(++maxInstrumenteInventar)//constructori cu paramterii, initializare
 	{
-		this->garantieAni = garantieAni;
+		this->nrInstrumenteInventar = nrInstrumenteInventar;
 		this->dataExpirare = dataExpirare;
 		this->temperatura = temperatura;
-		this->numeInstrument = new char[strlen(numeInstrument) + 1];
-		strcpy_s(this->numeInstrument, strlen(numeInstrument) + 1, numeInstrument);
+		if (numeInstrument != 0)
+		{
+			this->numeInstrument = new char[strlen(numeInstrument) + 1];
+			strcpy_s(this->numeInstrument, strlen(numeInstrument) + 1, numeInstrument);
+		}
+		else 
+		{
+			this->numeInstrument = nullptr;
+		}
 	}
-	*/
+	
 };
 
 int EchipamentMedical::maxInstrumenteInventar = 0;
 
 int main()
 {
-	Vaccin vaccin1;
+	//Constructor default
+	Vaccin vaccin1;// accesare constructor defult
 	VizitaMedicala vm1;
 	EchipamentMedical em1;
+	cout << vaccin1.greutateVaccin << endl; // accesez informatia din constructorul default
+	//Constructor cu parametri
+	Vaccin vaccin2 (1, "Se aplica in bratul stang", "antirabic", 0.01);
+	cout << vaccin2.instructiuniAplicare << endl; //acces constructorul cu parametrii
+	VizitaMedicala vm2(2, "Lori", "Bianac Giurcan",0.5);
+	cout << vm2.numePacient << endl;
+	EchipamentMedical em2(3, "stetoscop", "30.04.2029", 20.7);
+	cout << em2.dataExpirare << endl;
 	cout << "Programul merge!";
 
 
