@@ -8,6 +8,7 @@ class Vaccin //obiectul1
 public:
 	const int idVaccin;
 	int nrDoze;
+	string instructiuniAplicare;
 	char* numeVaccin;
 	float greutateVaccin;
 	static int nrDozeMaxime;
@@ -42,21 +43,32 @@ public:
 	{
 		delete[] numeVaccin;
 	}
-};
+*/
+}; 
+
+int Vaccin::nrDozeMaxime = 0; //neaparat aici altfel nu imi ruleaza programul
 
 class VizitaMedicala //obiectul2
 {
-public:
-	static int
-		const int idPacient;
+  public:
+	const int idPacient;
 	int nrVaccinuri;
 	char* numePacient;
 	string numeMedic;
 	//int* nrConsultatii;
 	float greutateAnimal;
+	static int nrViziteIntr_unAn;
 
+	VizitaMedicala() :idPacient(++nrViziteIntr_unAn)
+	{
+		this->nrVaccinuri = 2;
+		this->numeMedic = "Gabriela Stanescu";
+		this->greutateAnimal = 0.5;
+		this->numePacient = nullptr;
 
-	VizitaMedicala(int nrVaccinuri, const char* numePacient, string numeMedic, float greutateAnimal) //constructor cu parametrii, initializare
+	}
+
+	/*VizitaMedicala(int nrVaccinuri, const char* numePacient, string numeMedic, float greutateAnimal) //constructor cu parametrii, initializare
 	{
 		this->nrVaccinuri = nrVaccinuri;
 		this->numeMedic = numeMedic;
@@ -64,18 +76,29 @@ public:
 		this->numePacient = new char[strlen(numePacient) + 1];
 		strcpy_s(this->numePacient, strlen(numePacient) + 1, numePacient);
 	}
+	*/
 };
+
+int VizitaMedicala::nrViziteIntr_unAn = 0;
 
 class EchipamentMedical//obiectul3
 {
 public:
-	const int idInventar;
-	int garantieAni;
+	const int idInstrument;
+	int nrInstrumenteInventar;
 	char* numeInstrument;
 	string dataExpirare;
 	float temperatura;
+	static int maxInstrumenteInventar;
 
-	EchipamentMedical(int garantieAni, const char* numeInstrument, string dataExpirare, float temperatura) //constructori cu paramterii, initializare
+	EchipamentMedical() :idInstrument(++maxInstrumenteInventar)
+	{
+		this->nrInstrumenteInventar = 3;
+		this->dataExpirare = "23.02.2025";
+		this->temperatura = 20.3;
+		this->numeInstrument = nullptr;
+	}
+	/*EchipamentMedical(int garantieAni, const char* numeInstrument, string dataExpirare, float temperatura) //constructori cu paramterii, initializare
 	{
 		this->garantieAni = garantieAni;
 		this->dataExpirare = dataExpirare;
@@ -83,15 +106,16 @@ public:
 		this->numeInstrument = new char[strlen(numeInstrument) + 1];
 		strcpy_s(this->numeInstrument, strlen(numeInstrument) + 1, numeInstrument);
 	}
-} */
-
+	*/
 };
 
-int Vaccin::nrDozeMaxime = 0; //neaparat aici altfel nu imi ruleaza programul
+int EchipamentMedical::maxInstrumenteInventar = 0;
 
 int main()
 {
 	Vaccin vaccin1;
+	VizitaMedicala vm1;
+	EchipamentMedical em1;
 	cout << "Programul merge!";
 
 
