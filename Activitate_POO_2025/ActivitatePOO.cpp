@@ -1,19 +1,14 @@
-#include<iostream> //librarie care contine diferite functii
+﻿#include<iostream> //librarie care contine diferite functii
 #include<fstream> //partea de intrare
 #include<string> 
 
 using namespace std; //folosim acest spatiu standard ca la cout si cin sa nu mai punem operatorul de rezolutie std::
-// int numele clasei::atribut=0; // initializare atribut static, variabila globala
-
-
 class Vaccin //obiectul1
 {
-private:
-	const int idVaccin;
 public:
+	const int idVaccin;
 	int nrDoze;
 	char* numeVaccin;
-	string instructiuniAplicare;
 	float greutateVaccin;
 	static int nrDozeMaxime;
 
@@ -23,10 +18,10 @@ public:
 		this->instructiuniAplicare = "1. Deschidere recipient medicament 2. Extragere cu seringa 3. Aplucarea spirtului pe membrul pacientului 4. Introducere ac de la vaccin in membrul pacientului";
 		this->greutateVaccin = 0.01;
 		this->numeVaccin = nullptr;
-		nrDozeMaxime++;
+		//nrDozeMaxime++; am initializat jos numarul static daca pun  nrDozeMaxime++ imi da eroare
 	}
 
-	Vaccin(int nrDoze, string instructiuniAplicare, const char* numeVaccin, float greutateVaccin) //constructor cu parametrii, initializare
+	/*Vaccin(int nrDoze, string instructiuniAplicare, const char* numeVaccin, float greutateVaccin) //constructor cu parametrii, initializare
 	{
 		this->nrDoze = nrDoze;
 		this->instructiuniAplicare = instructiuniAplicare;
@@ -49,12 +44,11 @@ public:
 	}
 };
 
-
-/*/class VizitaMedicala //obiectul2
+class VizitaMedicala //obiectul2
 {
 public:
 	static int
-	const int idPacient;
+		const int idPacient;
 	int nrVaccinuri;
 	char* numePacient;
 	string numeMedic;
@@ -91,10 +85,14 @@ public:
 	}
 } */
 
+};
+
+int Vaccin::nrDozeMaxime = 0; //neaparat aici altfel nu imi ruleaza programul
 
 int main()
 {
+	Vaccin vaccin1;
+	cout << "Programul merge!";
 
-	Vaccin v1(2;
 
 }
