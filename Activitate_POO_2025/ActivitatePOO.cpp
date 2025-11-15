@@ -1,6 +1,6 @@
 ﻿#include<iostream> //librarie care contine diferite functii
 #include<fstream> //partea de intrare
-#include<string> 
+#include<cstring> 
 
 using namespace std; //folosim acest spatiu standard ca la cout si cin sa nu mai punem operatorul de rezolutie std::
 class Vaccin //obiectul1
@@ -38,15 +38,31 @@ public:
 		}
 	}
 
-	/* // Destructor pentru eliberarea memoriei
+	Vaccin(const Vaccin& v) :idVaccin(++nrDozeMaxime)//constructor de copiere
+	{
+		this->nrDoze = v.nrDoze;
+		this->instructiuniAplicare = v.instructiuniAplicare;
+		this->greutateVaccin = v.greutateVaccin;
+		if (v.numeVaccin != 0)
+		{
+			this->numeVaccin = new char[strlen(v.numeVaccin) + 1];
+			strcpy_s(this->numeVaccin, strlen(v.numeVaccin) + 1, v.numeVaccin);
+		}
+		else
+		{
+			this->numeVaccin = nullptr;
+		}
+	}
+	// Destructor pentru eliberarea memoriei
 	~Vaccin()
 	{
 		delete[] numeVaccin;
-	}*/
+	}
 
-}; 
+};
 
 int Vaccin::nrDozeMaxime = 0; //neaparat aici altfel nu imi ruleaza programul
+
 
 class VizitaMedicala //obiectul2
 {
@@ -67,7 +83,7 @@ class VizitaMedicala //obiectul2
 		this->numePacient = nullptr;
 		++nrViziteIntr_unAn;
 	}
-	VizitaMedicala(int nrVaccinuri, const char* numePacient, string numeMedic, float greutateAnimal) :idPacient(nrViziteIntr_unAn)
+	VizitaMedicala(int nrVaccinuri, const char* numePacient, string numeMedic, float greutateAnimal) :idPacient(++nrViziteIntr_unAn)
 	{
 		this->nrVaccinuri = nrVaccinuri;
 		this->numeMedic = numeMedic;
@@ -81,6 +97,10 @@ class VizitaMedicala //obiectul2
 		{
 			this->numePacient = nullptr;
 		}
+	}
+	~VizitaMedicala()
+	{
+		delete[] numePacient;
 	}
 /*
 	VizitaMedicala(int nrVaccinuri, const char* numePacient, string numeMedic, float greutateAnimal) //constructor cu parametrii, initializare
@@ -128,6 +148,10 @@ public:
 			this->numeInstrument = nullptr;
 		}
 	}
+	~EchipamentMedical()
+	{
+		delete[] numeInstrument;
+	}
 	
 };
 
@@ -136,7 +160,7 @@ int EchipamentMedical::maxInstrumenteInventar = 0;
 int main()
 {
 	//Constructor default
-	Vaccin vaccin1;// accesare constructor defult
+	Vaccin vaccin1;// accesare constructor default
 	VizitaMedicala vm1;
 	EchipamentMedical em1;
 	cout << vaccin1.greutateVaccin << endl; // accesez informatia din constructorul default
@@ -147,7 +171,18 @@ int main()
 	cout << vm2.numePacient << endl;
 	EchipamentMedical em2(3, "stetoscop", "30.04.2029", 20.7);
 	cout << em2.dataExpirare << endl;
+
+	// 2. Apelează Constructorul de Copiere (Sintaxă standard)
+	Vaccin v1 = vaccin1;
+
+	// 3. Apelează Constructorul de Copiere (Sintaxă directă)
+	Vaccin v2(vaccin1);
+	cout << "Nume Vaccin: " << v1.numeVaccin << endl;
+	cout << "Nume Vaccin: " << v2.numeVaccin << endl;
+
 	cout << "Programul merge!";
 
+
+	return 0;
 
 }
