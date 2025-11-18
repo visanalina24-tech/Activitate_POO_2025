@@ -199,7 +199,7 @@ int main()
     VizitaMedicala vizita_medicala1 = vm2;
     cout << "Nume Pacient: " << vm2.numePacient << endl;
     EchipamentMedical echipament_medical1 = em2;
-    cout << "Nume Echipament Medical: " << em2.numeInstrument << endl;
+    cout << "Nume Echipament Medical: " << em2.numeInstrument;
 
 
     cout << "Programul merge!";
