@@ -6,15 +6,15 @@ using namespace std; //folosim acest spatiu standard ca la cout si cin sa nu mai
 class Vaccin //obiectul1
 {
 private:
-    const int idVaccin;
+    const int idVaccin; //identificator unic
     int nrDoze;
     string instructiuniAplicare;
-    char* numeVaccin;
+    char* numeVaccin; //atribut alocat dinamic (pointer la caracter). Stochează numele vaccinului și necesită gestionarea memoriei (new/delete).
     float greutateVaccin;
-    static int nrDozeMaxime;
-    bool confirmare;
+    static int nrDozeMaxime; //stribut static (aparține clasei, nu obiectului). Folosit ca un contor pentru a genera ID-uri unice (idVaccin) pentru fiecare obiect nou
+    bool confirmare; //atribut boolean, indică o stare binară
 public:
-    Vaccin() :idVaccin(++nrDozeMaxime)//constructor default
+    Vaccin() :idVaccin(++nrDozeMaxime)//constructor default, inițializează atributele cu valori implicite
     {
         this->nrDoze = 2;
         this->instructiuniAplicare = "1. Deschidere recipient medicament, 2. Extragere cu seringa, 3. Aplicarea spirtului pe membrul pacientului, 4. Introducere ac de la vaccin in membrul pacientului";
@@ -57,14 +57,14 @@ public:
         }
         this->confirmare = v.confirmare;
     }
-    ~Vaccin()
+    ~Vaccin()// destructor pt dezalocarea memoriei char
     {
         if (numeVaccin != nullptr)
         {
             delete[] this->numeVaccin;
         }
     }
-    Vaccin& operator=(const Vaccin& p)
+    Vaccin& operator=(const Vaccin& p)//Operator de Atribuire, permite copierea valorilor de la un obiect la altul
     {
         if (numeVaccin != nullptr)
         {
@@ -101,11 +101,25 @@ public:
         {
             return this->greutateVaccin;
         }
+        void setNrdoze(int nrDoze)
+        {
+            if (nrDoze > 0)
+            {
+                this->nrDoze = nrDoze;
+            }
+
+        }
+
+        void setGreutateVaccin(float greutateVaccin)
+        {
+            if (greutateVaccin > 0)
+                this->greutateVaccin = greutateVaccin;
+        }
         bool getConfirmare()
         {
             return this->confirmare;
         }
-        friend ostream& operator<<(ostream& out, Vaccin& v)
+        friend ostream& operator<<(ostream& out, Vaccin& v)//Permite afișarea directă a obiectului 
         {
             cout << v.nrDoze << " " << v.instructiuniAplicare << " " << v.numeVaccin << " " << v.greutateVaccin << " " << v.confirmare << " ";
             if (v.numeVaccin != nullptr) {
@@ -113,7 +127,7 @@ public:
             }
             return out;
         }
-        bool operator!()
+        bool operator!()//implementează o logică de verificare personalizată
         {
             if (confirmare == false && nrDoze > 10) 
             {
@@ -124,8 +138,8 @@ public:
                 return false;
             }
         }
-
-        void operator~() {
+        void operator~() //schimba starea obiectului, operator tilda
+        {
             if (confirmare == 0)
             {
                 confirmare = 1;
@@ -140,7 +154,7 @@ int Vaccin::nrDozeMaxime = 0; //neaparat aici altfel nu imi ruleaza programul
 
 class VizitaMedicala //obiectul2
 {
-public:
+private:
     const int idPacient;
     int nrVaccinuri;
     char* numePacient;
@@ -148,7 +162,7 @@ public:
     //int* nrConsultatii;
     float greutateAnimal;
     static int nrViziteIntr_unAn;
-
+public:
     VizitaMedicala() :idPacient(++nrViziteIntr_unAn)//constructor default
     {
         this->nrVaccinuri = 2;
@@ -213,6 +227,39 @@ public:
         return *this;
 
     }
+    int getNrVaccinuri()
+    {
+        return this->nrVaccinuri;
+    }
+    char* getNumePacient()
+    {
+        return this->numePacient;
+    }
+    string getNumeMedic()
+    {
+        return this->numeMedic;
+    }
+    float getGreutateAnimal()
+    {
+        return this->greutateAnimal;
+    }
+    void setNumeMedic(string numeMedic)
+    {
+        this->numeMedic = numeMedic;
+    }
+    void setGreutateAnimal(float greutateAnimal)
+    {
+        this->greutateAnimal = greutateAnimal;
+    }
+   friend ofstream& operator<<(ofstream out, VizitaMedicala& vm0)//Permite afișarea directă a obiectului 
+   {
+       cout << vm0.nrVaccinuri << " " << vm0.numeMedic << " " << vm0.numePacient << " " << vm0.greutateAnimal;
+       if (vm0.numePacient != nullptr) {
+           out << vm0.numePacient;
+       }
+       return out;
+   }
+
 };
 int VizitaMedicala::nrViziteIntr_unAn = 0;
 
@@ -276,10 +323,10 @@ int EchipamentMedical::maxInstrumenteInventar = 0;
 
 int main()
 {
-   //Constructor default
-   Vaccin vaccin1;// accesare constructor default + definire obiect vaccin1
-   VizitaMedicala vm1;
-   EchipamentMedical em1;
+  //Constructor default
+  //Vaccin vaccin1;// accesare constructor default + definire obiect vaccin1
+  //VizitaMedicala vm1;
+  //EchipamentMedical em1;
 
   /* cout << vaccin1.greutateVaccin << endl; // accesez informatia din constructorul default
 
@@ -301,34 +348,55 @@ int main()
    cout << "Nume Echipament Medical: " << em2.numeInstrument << endl;
    */
 
-    cout << "Programul merge!";
-
-   //alt tip de afisare cu getteri 
-    Vaccin vaccin1(1, "Se aplica in bratul stang", "antirabic", 0.01, true); //am adaugat datele
-    cout << "Nr Doze: " << vaccin1.getNrDoze() << endl;
-    cout << "Instructiunile sunt: " << vaccin1.getInstuctiuniDeAplicare() << endl;
-    cout << "Nume Vaccin: " << vaccin1.getNumeVaccin() << endl;
-    cout << "Greutate Vaccin: " << vaccin1.getGreutateVaccin() << endl;
-    cout << "Confirmare:" << vaccin1.getConfirmare();
-    cout << endl;
-
-    Vaccin vaccin2(11, "Se aplica in bratul drept", "hpv", 0.20, false); //am adaugat datele
+   //alt tip de afisare cu getteri pt constructoroul cu parametrii
+    Vaccin vaccin2(1, "Se aplica in bratul stang", "antirabic", 0.01, true); //am adaugat datele
+    cout << "------Vaccinul 1------" << endl;
     cout << "Nr Doze: " << vaccin2.getNrDoze() << endl;
     cout << "Instructiunile sunt: " << vaccin2.getInstuctiuniDeAplicare() << endl;
     cout << "Nume Vaccin: " << vaccin2.getNumeVaccin() << endl;
     cout << "Greutate Vaccin: " << vaccin2.getGreutateVaccin() << endl;
-    cout << "Confirmare: " << vaccin2.getConfirmare() << endl;
+    cout << "Confirmare:" << vaccin2.getConfirmare();
+    cout << endl;
+    //update date folosinf set
+    vaccin2.setGreutateVaccin(0.3f);
+    cout <<"Dupa o actualizare greutatea vaccinului este: "<< vaccin2.getGreutateVaccin() << endl;
+    vaccin2.setNrdoze(3);
+    cout << "Dupa o actualizare nr de doze al pacientului este: " << vaccin2.getNrDoze() << endl;
+
+
+
+    Vaccin vaccin3(11, "Se aplica in bratul drept", "hpv", 0.20, false); //am adaugat datele
+    cout << "------Vaccinul 2------" << endl;
+    cout << "Nr Doze: " << vaccin3.getNrDoze() << endl;
+    cout << "Instructiunile sunt: " << vaccin3.getInstuctiuniDeAplicare() << endl;
+    cout << "Nume Vaccin: " << vaccin3.getNumeVaccin() << endl;
+    cout << "Greutate Vaccin: " << vaccin3.getGreutateVaccin() << endl;
+    cout << "Confirmare: " << vaccin3.getConfirmare() << endl;
     cout << endl;
     
-    bool pericol1 = !vaccin1;
-    cout <<"Stare: "<< (vaccin1.getNrDoze() > 10 ? "PERICOL" : "OK") << endl;
+    cout << "Pentru vaccinul 1" << endl;
+    bool pericol1 = !vaccin2;
+    cout <<"Stare: "<< (vaccin2.getNrDoze() > 10 ? "PERICOL" : "OK") << endl;
+    
 
-    ~vaccin1;
-    cout << "Dupa ~" << endl << vaccin1 << endl;
-    bool pericol2 = !vaccin2;
-    cout << "Stare: " << (vaccin2.getNrDoze() > 10 ? "PERICOL" : "OK") << endl;
+    cout << "Pentru vaccinul 2" << endl;
+    bool pericol2 = !vaccin3;
+    cout << "Stare: " << (vaccin3.getNrDoze() > 10 ? "PERICOL" : "OK") << endl;
 
-    ~vaccin2;
-    cout << "Dupa ~" << endl << vaccin2 << endl;
+
+    cout << "Programul merge!" << endl;
+
+    VizitaMedicala vm2(3, "Azorel", "Mihaela Soare", 20);
+    cout << "----Pacientul 1----" << endl;
+    cout << "Nr vaccinuri: " << vm2.getNrVaccinuri() << endl;
+    cout << "Numele Pacientului: " << vm2.getNumePacient() << endl;
+    cout << "Numele Medicului: " << vm2.getNumeMedic() << endl;
+    cout << "Greutate Animal: " << vm2.getGreutateAnimal() <<"kg"<< endl;
+    vm2.setGreutateAnimal(25);
+    vm2.setNumeMedic("Constanta Vasile");
+    cout << "Dupa Actualizare: " << endl;
+    cout << "Greutate animal: "<< vm2.getGreutateAnimal() << endl;
+    cout << "Nume Medic: "<<vm2.getNumeMedic() << endl;
+    cout << "Programul merge! x2";
     
 }
