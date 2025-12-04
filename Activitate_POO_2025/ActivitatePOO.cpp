@@ -109,7 +109,6 @@ public:
             }
 
         }
-
         void setGreutateVaccin(float greutateVaccin)
         {
             if (greutateVaccin > 0)
@@ -265,26 +264,29 @@ int VizitaMedicala::nrViziteIntr_unAn = 0;
 
 class EchipamentMedical//obiectul3
 {
-public:
+private:
     const int idInstrument;
     int nrInstrumenteInventar;
     char* numeInstrument;
     string dataExpirare;
     float temperatura;
     static int maxInstrumenteInventar;
-
+    bool expirat;
+public:
     EchipamentMedical() :idInstrument(++maxInstrumenteInventar)// constructor default
     {
         this->nrInstrumenteInventar = 3;
         this->dataExpirare = "23.02.2025";
         this->temperatura = 20.3;
         this->numeInstrument = nullptr;
+        this->expirat = expirat;
     }
-    EchipamentMedical(int nrInstrumenteInventar, const char* numeInstrument, string dataExpirare, float temperatura) :idInstrument(++maxInstrumenteInventar)//constructori cu paramterii, initializare
+    EchipamentMedical(int nrInstrumenteInventar, const char* numeInstrument, string dataExpirare, float temperatura, bool expirat) :idInstrument(++maxInstrumenteInventar)//constructori cu paramterii, initializare
     {
         this->nrInstrumenteInventar = nrInstrumenteInventar;
         this->dataExpirare = dataExpirare;
         this->temperatura = temperatura;
+        this->expirat = expirat;
         if (numeInstrument != 0)
         {
             this->numeInstrument = new char[strlen(numeInstrument) + 1];
@@ -301,6 +303,7 @@ public:
             this->nrInstrumenteInventar = em.nrInstrumenteInventar;
             this->dataExpirare = em.dataExpirare;
             this->temperatura = em.temperatura;
+            this->expirat = em.expirat;
             if (em.numeInstrument != 0)
             {
                 this->numeInstrument = new char[strlen(em.numeInstrument) + 1];
@@ -316,6 +319,45 @@ public:
     {
         if(numeInstrument!=nullptr)
         delete[] numeInstrument;
+    }
+    int getNrInstrumenteInventar()
+    {
+        return this->nrInstrumenteInventar;
+    }
+    char* getNumeInstrument()
+    {
+        return this->numeInstrument;
+    }
+    string getDataExpirare()
+    {
+        return this->dataExpirare;
+    }
+    float getTemperatura()
+    {
+        return this->temperatura;
+    }
+    bool getExpirat()
+    {
+        return this->expirat;
+    }
+    void setNrInstrumenteInventar(int nrInstrumenteInventar)
+    {
+        this->nrInstrumenteInventar = nrInstrumenteInventar;
+    }
+    void setDataExpirare(string dataExpirare)
+    {
+        this->dataExpirare = dataExpirare;
+    }
+
+
+    friend ofstream& operator<<(ofstream out, EchipamentMedical& echipmed)
+    {
+        cout << echipmed.nrInstrumenteInventar << " " << echipmed.dataExpirare << " " << echipmed.temperatura << " " << echipmed.numeInstrument << endl;
+        if (echipmed.numeInstrument != nullptr)
+        {
+            cout << echipmed.numeInstrument;
+        }
+        return out;
     }
 };
 
@@ -348,7 +390,8 @@ int main()
    cout << "Nume Echipament Medical: " << em2.numeInstrument << endl;
    */
 
-   //alt tip de afisare cu getteri pt constructoroul cu parametrii
+   //alt tip de afisare cu getteri pt constructorul cu parametrii
+    cout << "FISA VACCINURI PACIENT" << endl;
     Vaccin vaccin2(1, "Se aplica in bratul stang", "antirabic", 0.01, true); //am adaugat datele
     cout << "------Vaccinul 1------" << endl;
     cout << "Nr Doze: " << vaccin2.getNrDoze() << endl;
@@ -357,7 +400,7 @@ int main()
     cout << "Greutate Vaccin: " << vaccin2.getGreutateVaccin() << endl;
     cout << "Confirmare:" << vaccin2.getConfirmare();
     cout << endl;
-    //update date folosinf set
+    //update date folosind set
     vaccin2.setGreutateVaccin(0.3f);
     cout <<"Dupa o actualizare greutatea vaccinului este: "<< vaccin2.getGreutateVaccin() << endl;
     vaccin2.setNrdoze(3);
@@ -374,7 +417,7 @@ int main()
     cout << "Confirmare: " << vaccin3.getConfirmare() << endl;
     cout << endl;
     
-    cout << "Pentru vaccinul 1" << endl;
+    cout << "Pentru vaccinul 1" << endl;//varianta pentru a determina daca o variabila de tip este de tip false sau true si ce consecinte au
     bool pericol1 = !vaccin2;
     cout <<"Stare: "<< (vaccin2.getNrDoze() > 10 ? "PERICOL" : "OK") << endl;
     
@@ -382,10 +425,13 @@ int main()
     cout << "Pentru vaccinul 2" << endl;
     bool pericol2 = !vaccin3;
     cout << "Stare: " << (vaccin3.getNrDoze() > 10 ? "PERICOL" : "OK") << endl;
+    cout << endl;
 
 
-    cout << "Programul merge!" << endl;
+    cout << "Programul merge!" << endl;// pun "Programul Merge!" ca sa pot observa daca programul ruleaza pana la capat
+    cout << endl;
 
+    cout << "FISA PACIENT VIZITA MEDICALA" << endl;
     VizitaMedicala vm2(3, "Azorel", "Mihaela Soare", 20);
     cout << "----Pacientul 1----" << endl;
     cout << "Nr vaccinuri: " << vm2.getNrVaccinuri() << endl;
@@ -397,6 +443,70 @@ int main()
     cout << "Dupa Actualizare: " << endl;
     cout << "Greutate animal: "<< vm2.getGreutateAnimal() << endl;
     cout << "Nume Medic: "<<vm2.getNumeMedic() << endl;
+    cout << endl;
+
+    cout << "INFORMATII ECHIPAMENT MEDICAL" << endl;
+    EchipamentMedical em2(5, "Stetoscop", "20.11.2025", 45.2, true);
+    {
+        cout << "-----Instrumentul 1------" << endl;
+        cout << "Numarul de astfel de instrumente: " << em2.getNrInstrumenteInventar() << endl;
+        cout << "Data de expirare: " << em2.getDataExpirare() << endl;
+        cout << "Numele Instrumentului: " << em2.getNumeInstrument() << endl;
+        cout << "Temperatura: " << em2.getTemperatura() << " grade" << endl;
+        if (em2.getExpirat() != false) //o alta varianta pentru a determina daca o variabila de tip este de tip false sau true si ce consecinte au
+        {
+            cout << "Trebuie indepartat" << endl;
+        }
+        else if (em2.getExpirat() == false)
+        {
+            cout << "Totul ok" << endl;
+        }
+        em2.setNrInstrumenteInventar(10);
+        cout << "Dupa Actualizare: " << em2.getNrInstrumenteInventar() << endl;
+    }
+    EchipamentMedical em3(10, "Bisturiu", "21.10.2005", 50.6, true);
+    {
+        cout << "-----Instrumentul 2------" << endl;
+        cout << "Numarul de astfel de instrumente: " << em3.getNrInstrumenteInventar() << endl;
+        cout << "Data de expirare: " << em3.getDataExpirare() << endl;
+        cout << "Numele Instrumentului: " << em3.getNumeInstrument() << endl;
+        cout << "Temperatura: " << em3.getTemperatura() << " grade" << endl;
+        em3.setNrInstrumenteInventar(10);
+        cout << "Dupa Actualizare: " << em3.getNrInstrumenteInventar() << endl;
+        if (em3.getExpirat() != false) //m-am jucat putin cu getterul, setterul si bool
+        {
+            cout << "Trebuie actualizat!" << endl;
+            em3.setDataExpirare("30.11.2032");
+            cout << "Dupa actualizare: "<< em3.getDataExpirare()<< endl;
+        }
+        else if (em3.getExpirat() == false)
+        {
+            cout << "Totul ok" << endl;
+        }
+    }
+    EchipamentMedical em4(2, "Endoscop", "10.12.2025",30.1, false);
+    {
+        cout << "-----Instrumentul 3------" << endl;
+        cout << "Numarul de astfel de instrumente: " << em4.getNrInstrumenteInventar() << endl;
+        cout << "Data de expirare: " << em4.getDataExpirare() << endl;
+        cout << "Numele Instrumentului: " << em4.getNumeInstrument() << endl;
+        cout << "Temperatura: " << em4.getTemperatura() << " grade" << endl;
+        em4.setNrInstrumenteInventar(10);
+        cout << "Dupa Actualizare: " << em4.getNrInstrumenteInventar() << endl;
+        if (em4.getExpirat() != false)
+        {
+            cout << "Trebuie actualizat!" << endl;
+            em4.setDataExpirare("30.11.2032");
+            cout << "Dupa actualizare: " << em4.getDataExpirare() << endl;
+        }
+        else if (em4.getExpirat() == false)
+        {
+            cout << "Totul ok" << endl;
+        }
+    }
+    cout << endl;
+
+
     cout << "Programul merge! x2";
     
 }
