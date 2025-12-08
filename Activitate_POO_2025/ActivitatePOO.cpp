@@ -1,9 +1,9 @@
 ﻿#include<iostream> //librarie care contine diferite functii
 #include<fstream> //partea de intrare
-#include<cstring>
+#include<string>
 
-using namespace std; //folosim acest spatiu standard ca la cout si cin sa nu mai punem operatorul de rezolutie std::
-class Vaccin //obiectul1
+using namespace std;
+/*class Vaccin //obiectul1
 {
 private:
     const int idVaccin; //identificator unic
@@ -11,7 +11,7 @@ private:
     string instructiuniAplicare;
     char* numeVaccin; //atribut alocat dinamic (pointer la caracter). Stochează numele vaccinului și necesită gestionarea memoriei (new/delete).
     float greutateVaccin;
-    static int nrDozeMaxime; //stribut static (aparține clasei, nu obiectului). Folosit ca un contor pentru a genera ID-uri unice (idVaccin) pentru fiecare obiect nou
+    static int nrDozeMaxime; //atribut static (aparține clasei, nu obiectului). Folosit ca un contor pentru a genera ID-uri unice (idVaccin) pentru fiecare obiect nou
     bool confirmare; //atribut boolean, indică o stare binară
 public:
     Vaccin() :idVaccin(++nrDozeMaxime)//constructor default, inițializează atributele cu valori implicite
@@ -150,32 +150,38 @@ public:
         }
 };
 int Vaccin::nrDozeMaxime = 0; //neaparat aici altfel nu imi ruleaza programul
-
-class VizitaMedicala //obiectul2
+*/
+class FisaPacient //obiectul2
 {
 private:
     const int idPacient;
     int nrVaccinuri;
     char* numePacient;
-    string numeMedic;
-    //int* nrConsultatii;
+    string numeVaccinuriEfectuate;
     float greutateAnimal;
+    int varstaAni;
+    int varstaLuni;
+    bool problemeDeSanatate;
     static int nrViziteIntr_unAn;
 public:
-    VizitaMedicala() :idPacient(++nrViziteIntr_unAn)//constructor default
-    {
-        this->nrVaccinuri = 2;
-        this->numeMedic = "Gabriela Stanescu";
+    float* nrConsultatii;
+    int nrConsultatii0;
+   FisaPacient() :idPacient(++nrViziteIntr_unAn)//constructor default
+   {
+        this->nrVaccinuri = 3;
+        this->numeVaccinuriEfectuate = "Antirabie, Polivalent, Monovalent";
+        this->numePacient = nullptr;
+        this->varstaAni = 2;
+        this->varstaLuni = 5;
+        this->problemeDeSanatate = true;
         this->greutateAnimal = 0.5;
         this->numePacient = nullptr;
-
-    }
-    VizitaMedicala(int nrVaccinuri, const char* numePacient, string numeMedic, float greutateAnimal) :idPacient(++nrViziteIntr_unAn)//constructor cu parametrii, initializare
+        this->nrConsultatii = NULL;
+        this->nrConsultatii0 = 2;
+   }
+    FisaPacient(const char* numePacient, int varstaAni,int varstaLuni, string numeVaccinuriEfectuate,int nrVaccinuri,bool problemeDeSanatate, float greutateAnimal, int nrConsultatii0,const float* nrConsultatii) :idPacient(++nrViziteIntr_unAn)//constructor cu parametrii, initializare
     {
-        this->nrVaccinuri = nrVaccinuri;
-        this->numeMedic = numeMedic;
-        this->greutateAnimal = greutateAnimal;
-        if (numePacient != 0)
+        if (numePacient != nullptr)
         {
             this->numePacient = new char[strlen(numePacient) + 1];
             strcpy_s(this->numePacient, strlen(numePacient) + 1, numePacient);
@@ -184,47 +190,73 @@ public:
         {
             this->numePacient = nullptr;
         }
-    }
-    VizitaMedicala(const VizitaMedicala& vm) :idPacient(++nrViziteIntr_unAn)// constrctor de copiere
-    {
-        this->nrVaccinuri = vm.nrVaccinuri;
-        this->numeMedic = vm.numeMedic;
-        this->greutateAnimal = vm.greutateAnimal;
-        if (vm.numePacient != 0)
+        this->varstaAni = varstaAni;
+        this->varstaLuni = varstaLuni;
+        this->numeVaccinuriEfectuate = numeVaccinuriEfectuate;
+        this->problemeDeSanatate = problemeDeSanatate;
+        this->greutateAnimal = greutateAnimal;
+        this->nrConsultatii = new float[nrConsultatii0];
+        for(int i = 0; i < this->nrConsultatii0;i++)
         {
-            this->numePacient = new char[strlen(vm.numePacient) + 1];
-            strcpy_s(this->numePacient, strlen(vm.numePacient) + 1, vm.numePacient);
+            this->nrConsultatii[i] = nrConsultatii[i];
+        }
+    }
+    FisaPacient (const FisaPacient &fp1) :idPacient(++nrViziteIntr_unAn)// constrctor de copiere
+    {
+        if (fp1.numePacient != nullptr)
+        {
+            this->numePacient = new char[strlen(fp1.numePacient) + 1];
+            strcpy_s(this->numePacient, strlen(fp1.numePacient) + 1, fp1.numePacient);
         }
         else
         {
             this->numePacient = nullptr;
         }
+        this->varstaAni = fp1.varstaAni;
+        this->varstaLuni = fp1.varstaLuni;
+        this->numeVaccinuriEfectuate = fp1.numeVaccinuriEfectuate;
+        this->problemeDeSanatate = fp1.problemeDeSanatate;
+        this->greutateAnimal = fp1.greutateAnimal;
+        this->nrConsultatii = new float[fp1.nrConsultatii0];
+        for (int i = 0; i < fp1.nrConsultatii0; i++)
+        {
+            this->nrConsultatii[i] = fp1.nrConsultatii[i];
+        }
     }
-    ~VizitaMedicala()
+    ~FisaPacient()
     {
         if (numePacient != nullptr)
+        {
             delete[] this->numePacient;
+        }
+
     };
-    VizitaMedicala& operator=(const VizitaMedicala& p) 
+    FisaPacient& operator=(const FisaPacient& fp2) 
     {
         if (numePacient != nullptr)
         {
             delete[] this->numePacient;
         }
-        this->nrVaccinuri = p.nrVaccinuri;
-        this->numeMedic = p.numeMedic;
-        this->greutateAnimal = p.greutateAnimal;
-        if (p.numePacient != 0)
+        if (fp2.numePacient != nullptr)
         {
-            this->numePacient = new char[strlen(p.numePacient) + 1];
-            strcpy_s(this->numePacient, strlen(p.numePacient) + 1, p.numePacient);
+            this->numePacient = new char[strlen(fp2.numePacient) + 1];
+            strcpy_s(this->numePacient, strlen(fp2.numePacient) + 1, fp2.numePacient);
         }
         else
         {
             this->numePacient = nullptr;
+        }
+        this->varstaAni = fp2.varstaAni;
+        this->varstaLuni = fp2.varstaLuni;
+        this->numeVaccinuriEfectuate = fp2.numeVaccinuriEfectuate;
+        this->problemeDeSanatate = fp2.problemeDeSanatate;
+        this->greutateAnimal = fp2.greutateAnimal;
+        this->nrConsultatii = new float[fp2.nrConsultatii0];
+        for (int i = 0; i < fp2.nrConsultatii0; i++)
+        {
+            this->nrConsultatii[i] = fp2.nrConsultatii[i];
         }
         return *this;
-
     }
     int getNrVaccinuri()
     {
@@ -234,34 +266,59 @@ public:
     {
         return this->numePacient;
     }
-    string getNumeMedic()
+    string getNumeVaccinuriEfectuate()
     {
-        return this->numeMedic;
+        return this->numeVaccinuriEfectuate;
     }
     float getGreutateAnimal()
     {
         return this->greutateAnimal;
     }
-    void setNumeMedic(string numeMedic)
+    int getVarstaAni()
     {
-        this->numeMedic = numeMedic;
+            return this->varstaAni;
     }
+    int getVarstaLuni()
+    {
+        return this->varstaLuni;
+    }
+    bool getProblemeDeSanatate()
+    {
+        return this->problemeDeSanatate;
+
+    }
+   /* float* getNrConsultatii()
+    {
+        return this->nrConsultatii;
+    }
+    int getNrConsulatii0(int pozitie) {
+        if (pozitie >= 0 && pozitie < ) 
+        {
+            return this->nrConsultatii0[pozitie];
+            throw exception();
+        }
+        */
+
+    
     void setGreutateAnimal(float greutateAnimal)
     {
         this->greutateAnimal = greutateAnimal;
     }
-   friend ofstream& operator<<(ofstream out, VizitaMedicala& vm0)//Permite afișarea directă a obiectului 
+   friend ofstream& operator<<(ofstream out, FisaPacient& fp0)//Permite afișarea directă a obiectului 
    {
-       cout << vm0.nrVaccinuri << " " << vm0.numeMedic << " " << vm0.numePacient << " " << vm0.greutateAnimal;
-       if (vm0.numePacient != nullptr) {
-           out << vm0.numePacient;
-       }
-       return out;
+      cout<<fp0.nrVaccinuri<<" "<<fp0.numeVaccinuriEfectuate<<" "<<fp0.nrConsultatii<<" "<<fp0.greutateAnimal<<" "<<fp0.varstaAni<<" " <<fp0.varstaLuni<<" "<<fp0.problemeDeSanatate;
+      if (fp0.numePacient != nullptr)
+      {
+          cout << fp0.numePacient;
+          cout << endl;
+      }
+          return out;
    }
 
 };
-int VizitaMedicala::nrViziteIntr_unAn = 0;
 
+int FisaPacient::nrViziteIntr_unAn = 0;
+/*
 class EchipamentMedical//obiectul3
 {
 private:
@@ -391,7 +448,7 @@ int main()
    */
 
    //alt tip de afisare cu getteri pt constructorul cu parametrii
-    cout << "FISA VACCINURI PACIENT" << endl;
+  /*  cout << "FISA VACCINURI PACIENT" << endl;
     Vaccin vaccin2(1, "Se aplica in bratul stang", "antirabic", 0.01, true); //am adaugat datele
     cout << "------Vaccinul 1------" << endl;
     cout << "Nr Doze: " << vaccin2.getNrDoze() << endl;
@@ -437,14 +494,13 @@ int main()
     cout << "Nr vaccinuri: " << vm2.getNrVaccinuri() << endl;
     cout << "Numele Pacientului: " << vm2.getNumePacient() << endl;
     cout << "Numele Medicului: " << vm2.getNumeMedic() << endl;
-    cout << "Greutate Animal: " << vm2.getGreutateAnimal() <<"kg"<< endl;
+    cout << "Greutate Animal: " << vm2.getGreutateAnimal() << "kg" << endl;
     vm2.setGreutateAnimal(25);
     vm2.setNumeMedic("Constanta Vasile");
     cout << "Dupa Actualizare: " << endl;
-    cout << "Greutate animal: "<< vm2.getGreutateAnimal() << endl;
-    cout << "Nume Medic: "<<vm2.getNumeMedic() << endl;
+    cout << "Greutate animal: " << vm2.getGreutateAnimal() << endl;
+    cout << "Nume Medic: " << vm2.getNumeMedic() << endl;
     cout << endl;
-
     cout << "INFORMATII ECHIPAMENT MEDICAL" << endl;
     EchipamentMedical em2(5, "Stetoscop", "20.11.2025", 45.2, true);
     {
@@ -509,4 +565,16 @@ int main()
 
     cout << "Programul merge! x2";
     
+    // de adaugat id pacient la fisa pacientului in interiorul constructorului cumva pentru a arata mai bine
+}
+*/
+int main()
+{
+    FisaPacient f1("Azorel", 0, 6, "Antirabie, Polivalent, Monovalent", 3, false, 10.5, 0,4,new float[4]{1,2,3,4});
+    cout << f1.getNumePacient() << endl;
+    cout << f1.getVarstaAni() << endl;
+    cout << f1.getNumeVaccinuriEfectuate() << endl;
+    cout << f1.getNrVaccinuri() << endl;
+    cout << f1.getProblemeDeSanatate() << endl;
+    cout << f1.getGreutateAnimal() << endl;
 }
